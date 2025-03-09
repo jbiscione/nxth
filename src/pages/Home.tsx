@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, PenTool as Tool, User, Bell, HelpCircle, RefreshCw, Wifi, WifiOff, Database } from 'lucide-react';
+import { Calendar, Mic, User, PenTool as Tool, Users, Bell, HelpCircle, RefreshCw, Wifi, WifiOff, Database } from 'lucide-react';
 import EventCard from '../components/EventCard';
 import PopularEventCard from '../components/PopularEventCard';
 import Navbar from '../components/Navbar';
@@ -105,9 +105,10 @@ const Home: React.FC = () => {
   // Elementos de la barra de navegación
   const navItems = [
     { icon: <Calendar size={24} />, label: 'Inicio', active: true },
-    { icon: <Users size={24} />, label: 'Speakers', active: false },
-    { icon: <User size={24} />, label: 'Participantes', active: false },
+    { icon: <Mic size={24} />, label: 'Speakers', active: false },
+    { icon: <Users size={24} />, label: 'Participantes', active: false },
     { icon: <Tool size={24} />, label: 'Herramientas', active: false },
+    { icon: <User size={24} />, label: 'Perfil', active: false }
   ];
 
   const toggleHelpTooltip = () => {
@@ -253,12 +254,6 @@ const Home: React.FC = () => {
             
             {/* Help button */}
             <div className="relative">
-              <button 
-                className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center"
-                onClick={toggleHelpTooltip}
-              >
-                <HelpCircle size={20} className="text-gray-300" />
-              </button>
               
               {showHelpTooltip && (
                 <div className="absolute right-0 mt-2 w-64 bg-gray-800 rounded-lg shadow-lg p-3 z-10">
@@ -271,16 +266,8 @@ const Home: React.FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Contactar soporte
+                      Contactar con nuestro stuff
                     </a>
-                    
-                    <button 
-                      className="text-sm text-gray-300 hover:underline flex items-center"
-                      onClick={handleForceReset}
-                    >
-                      <RefreshCw size={14} className="mr-1" />
-                      Reiniciar app
-                    </button>
                   </div>
                 </div>
               )}

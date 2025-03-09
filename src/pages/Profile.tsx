@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Users, PenTool as Tool, User, LogOut, Linkedin, Instagram, Mail, Camera, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import { Calendar, Mic, PenTool as Tool, User, Users, LogOut, Linkedin, Instagram, Mail, Camera, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -15,11 +15,13 @@ const Profile: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
 
+  // Elementos de la barra de navegación
   const navItems = [
     { icon: <Calendar size={24} />, label: 'Inicio', active: false },
-    { icon: <Users size={24} />, label: 'Speakers', active: false },
-    { icon: <User size={24} />, label: 'Participantes', active: false },
+    { icon: <Mic size={24} />, label: 'Speakers', active: false },
+    { icon: <Users size={24} />, label: 'Participantes', active: false },
     { icon: <Tool size={24} />, label: 'Herramientas', active: false },
+    { icon: <User size={24} />, label: 'Perfil', active: true }
   ];
 
   useEffect(() => {
@@ -112,24 +114,6 @@ const Profile: React.FC = () => {
             <p className="text-gray-400 mt-1">Información personal y configuración</p>
           </div>
           <div className="flex gap-2">
-            <button 
-              className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center"
-              onClick={toggleOfflineMode}
-            >
-              {isOfflineMode ? (
-                <WifiOff size={20} className="text-yellow-400" />
-              ) : (
-                <Wifi size={20} className="text-green-400" />
-              )}
-            </button>
-            
-            <button 
-              className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center"
-              onClick={handleRefresh}
-              disabled={refreshing || isOfflineMode}
-            >
-              <RefreshCw size={20} className={`${refreshing ? 'animate-spin text-[#7065ef]' : 'text-gray-300'}`} />
-            </button>
           </div>
         </div>
 
@@ -175,7 +159,7 @@ const Profile: React.FC = () => {
                 </div>
               </div>
               <h2 className="text-xl font-bold mt-4">{user.firstName} {user.lastName}</h2>
-              <p className="text-gray-400">Participante NeXthumans 2025</p>
+              <p className="text-gray-400">{user.role}</p>
               
               <div className="flex mt-4 space-x-3">
                 {user.linkedinUrl && (
@@ -253,7 +237,17 @@ const Profile: React.FC = () => {
         <div className="px-4 mt-8">
           <div className="text-center text-gray-500 text-xs">
             <p>NeXthumans App v1.0</p>
-            <p className="mt-1">© 2025 NeXthumans. Todos los derechos reservados.</p>
+            <p>
+      Desarrollado por{' '}
+      <a 
+        href="https://acrons.net" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="text-[#7065ef] hover:underline"
+      >
+        Acrons - Leading the Digital Frontier
+      </a>
+    </p>            <p className="mt-1">© 2025 NeXthumans. Todos los derechos reservados.</p>
           </div>
         </div>
       </div>

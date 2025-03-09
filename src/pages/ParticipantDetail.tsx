@@ -116,18 +116,9 @@ const ParticipantDetail: React.FC = () => {
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="max-w-md mx-auto pb-20">
         <div className="p-4 flex justify-between items-center">
-          <Link to="/participants" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+          <Link to="/participants/list" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
             <ArrowLeft size={20} />
           </Link>
-          <div className="flex gap-2">
-            <button 
-              onClick={handleRefresh}
-              disabled={refreshing || isOfflineMode}
-              className={`w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center ${(refreshing || isOfflineMode) ? 'opacity-50' : ''}`}
-            >
-              <RefreshCw size={20} className={`text-gray-300 ${refreshing ? 'animate-spin text-[#7065ef]' : ''}`} />
-            </button>
-          </div>
         </div>
 
         <div className="px-4 mb-3">
@@ -168,7 +159,7 @@ const ParticipantDetail: React.FC = () => {
             <div className="flex justify-between items-start">
               <div>
                 <h2 className="text-xl font-bold">{participant?.firstName} {participant?.lastName}</h2>
-                <p className="text-gray-400 mt-1">Participante</p>
+                <p className="text-gray-400 mt-1">{participant?.role}</p>
               </div>
             </div>
             

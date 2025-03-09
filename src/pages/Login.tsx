@@ -6,6 +6,7 @@ import { fetchSpeakers } from '../services/speakerService';
 import { fetchParticipants, getParticipantsDataInfo, forceParticipantsUpdate, checkParticipantsEndpoint, clearParticipantsCache } from '../services/userService';
 import { RefreshCw, Wifi, WifiOff, Database, AlertTriangle, Key } from 'lucide-react';
 import DataStatusIndicator from '../components/DataStatusIndicator';
+import { loadConfigFromAPI } from '../services/configService';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -96,6 +97,15 @@ const Login: React.FC = () => {
     
     try {
       addDebugLog(`Attempting login with: ${email} / ${password}`);
+      
+      // Load config first
+      const configResult = await loadConfigFromAPI();
+      if (!configResult.success) {
+        addDebugLog(`Warning: Could not load config: ${configResult.message}`);
+      } else {
+        addDebugLog(`Config loaded successfully. Current day: ${configResult.config?.day}`);
+      }
+      
       const success = await login(email, password);
       if (success) {
         // Show data update message

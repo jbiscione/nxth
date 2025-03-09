@@ -3,9 +3,9 @@ import { saveToLocalStorage, getFromLocalStorage, STORAGE_KEYS } from './localSt
 import axios from 'axios';
 
 // Storage keys
-const PARTICIPANTS_STORAGE_KEY = 'participants_data';
-const PARTICIPANTS_LAST_UPDATED_KEY = 'participants_last_updated';
-const PARTICIPANTS_SOURCE_KEY = 'participants_data_source';
+const PARTICIPANTS_STORAGE_KEY = 'user_data';
+const PARTICIPANTS_LAST_UPDATED_KEY = 'user_last_updated';
+const PARTICIPANTS_SOURCE_KEY = 'user_data_source';
 
 // External API URL - using proxy to avoid CORS issues
 const EXTERNAL_PARTICIPANTS_API = '/api/external/Participants.json';
@@ -66,6 +66,7 @@ export const loadParticipantsFromAPI = async (): Promise<{
       email: item.Usuario || '',
       password: String(item.Contraseña || '12345'),
       photoUrl: item.Foto || '',
+      role: item.Role || '',
       linkedinUrl: item.Linkedin || '',
       instagramUrl: item.Instagram || ''
     }));
@@ -99,7 +100,7 @@ export const getHardcodedParticipants = (): Participant[] => {
   const hardcodedParticipants: Participant[] = [
     {
       id: 1,
-      firstName: 'Juan Bautista',
+      firstName: 'Juan',
       lastName: 'Biscione',
       email: 'jbiscione@gmail.com',
       password: '12345',

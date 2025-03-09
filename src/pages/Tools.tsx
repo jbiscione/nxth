@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Users, PenTool as Tool, User, Download, FileText, Link2, Zap, Database } from 'lucide-react';
+import { Calendar, User, Users, Mic, PenTool as Tool, Download, FileText, Link2, Zap, Database } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -64,11 +64,13 @@ const ToolCard: React.FC<ToolCardProps> = ({
 };
 
 const Tools: React.FC = () => {
+  // Elementos de la barra de navegación
   const navItems = [
     { icon: <Calendar size={24} />, label: 'Inicio', active: false },
-    { icon: <Users size={24} />, label: 'Speakers', active: false },
-    { icon: <User size={24} />, label: 'Participantes', active: false },
+    { icon: <Mic size={24} />, label: 'Speakers', active: false },
+    { icon: <Users size={24} />, label: 'Participantes', active: false },
     { icon: <Tool size={24} />, label: 'Herramientas', active: true },
+    { icon: <User size={24} />, label: 'Perfil', active: false }
   ];
 
   const tools = [
@@ -89,13 +91,6 @@ const Tools: React.FC = () => {
       title: 'Recursos',
       description: 'Material complementario y recursos adicionales',
       url: 'https://nexthumans.net/recursos'
-    },
-    {
-      icon: <Database size={20} />,
-      title: 'Verificar API',
-      description: 'Herramienta para verificar el estado de la API de participantes',
-      isInternalLink: true,
-      internalPath: '/check-endpoint'
     },
     {
       icon: <Zap size={20} />,

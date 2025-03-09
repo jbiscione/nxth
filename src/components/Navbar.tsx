@@ -14,7 +14,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ items }) => {
   const location = useLocation();
   
-  // Update getRoute to include participants
+  // Mapeo de etiquetas a rutas
   const getRoute = (label: string): string => {
     switch (label) {
       case 'Inicio':
@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
       case 'Speakers':
         return '/speakers';
       case 'Participantes':
-        return '/participants';
+          return '/participants/list';
       case 'Herramientas':
         return '/tools';
       case 'Perfil':
@@ -32,7 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
     }
   };
 
-  // Determine if an item is active based on the current route
+  // Determinar si un ítem está activo basado en la ruta actual
   const isActive = (label: string): boolean => {
     const route = getRoute(label);
     return location.pathname === route;

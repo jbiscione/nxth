@@ -3,7 +3,7 @@ import { Search, Linkedin, Instagram, RefreshCw, List, AlertCircle, Info, Databa
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { Speaker } from '../types';
-import { Calendar, Users, PenTool as Tool, User } from 'lucide-react';
+import { Calendar, Mic, PenTool as Tool, Users, User } from 'lucide-react';
 import { fetchSpeakers, forceSpeakersUpdate, getSpeakersDataInfo } from '../services/speakerService';
 import { useAuth } from '../context/AuthContext';
 import DataStatusIndicator from '../components/DataStatusIndicator';
@@ -27,12 +27,14 @@ const SpeakerCard: React.FC<SpeakerCardProps> = ({
   linkedinUrl, 
   instagramUrl 
 }) => {
+  // Handle social media clicks without propagating to parent link
   const handleSocialClick = (e: React.MouseEvent, url: string) => {
     e.preventDefault();
     e.stopPropagation();
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  // Truncate text to a single line with ellipsis
   const truncateText = (text: string, maxLength: number = 30) => {
     if (!text || text === '-') return '';
     if (text.length <= maxLength) return text;
@@ -48,6 +50,7 @@ const SpeakerCard: React.FC<SpeakerCardProps> = ({
             alt={name} 
             className="w-full h-full object-cover" 
             onError={(e) => {
+              // Fallback a una imagen genérica si la URL no funciona
               (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80';
             }}
           />
@@ -99,6 +102,7 @@ const Speakers: React.FC = () => {
     try {
       setLoading(true);
       
+      // Si estamos en modo offline y se solicita actualización forzada, mostrar mensaje
       if (isOfflineMode && forceRefresh) {
         setError('No se pueden actualizar los datos en modo sin conexión');
         setTimeout(() => setError(''), 3000);
@@ -107,10 +111,12 @@ const Speakers: React.FC = () => {
         return;
       }
       
+      // Get data info first
       const dataInfo = await getSpeakersDataInfo();
       setLastUpdated(dataInfo.lastUpdated);
       setDataSource(dataInfo.source);
       
+      // Si se solicita actualización forzada, usar el servicio de actualización forzada
       if (forceRefresh) {
         const result = await forceSpeakersUpdate();
         if (result.success && result.speakers) {
@@ -119,12 +125,14 @@ const Speakers: React.FC = () => {
           setDataSource(result.source || 'desconocido');
           setError(`Datos actualizados correctamente. Total: ${result.speakers.length} speakers (Fuente: ${result.source || 'desconocida'}).`);
           
+          // Update last updated info
           const updatedInfo = await getSpeakersDataInfo();
           setLastUpdated(updatedInfo.lastUpdated);
         } else {
           setError(result.message || 'Error al actualizar los datos');
           setDataSource(result.source || 'desconocido');
           
+          // Asegurarse de que tenemos datos para mostrar incluso si hay error
           if (result.speakers && result.speakers.length > 0) {
             setSpeakers(result.speakers);
             setSpeakerCount(result.speakers.length);
@@ -132,13 +140,17 @@ const Speakers: React.FC = () => {
         }
         setTimeout(() => setError(''), 5000);
       } else {
+        // Obtener speakers normalmente
         const data = await fetchSpeakers();
         
+        // Verificar que los IDs sean consecutivos
         const sortedData = [...data].sort((a, b) => a.id - b.id);
         
+        // Actualizar el contador de speakers
         setSpeakerCount(sortedData.length);
         setSpeakers(sortedData);
         
+        // Get updated data info
         const updatedInfo = await getSpeakersDataInfo();
         setLastUpdated(updatedInfo.lastUpdated);
         setDataSource(updatedInfo.source);
@@ -147,6 +159,7 @@ const Speakers: React.FC = () => {
       console.error('Error fetching speakers:', err instanceof Error ? err.message : 'Unknown error');
       setError('No se pudieron cargar los speakers. Por favor, intenta de nuevo más tarde.');
       
+      // Intentar obtener datos de respaldo
       try {
         const fallbackData = await fetchSpeakers();
         if (fallbackData && fallbackData.length > 0) {
@@ -169,21 +182,24 @@ const Speakers: React.FC = () => {
     fetchSpeakersData();
   }, []);
 
+  // Filtrar speakers según el término de búsqueda
   const filteredSpeakers = speakers.filter(speaker => 
     speaker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     speaker.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (speaker.activity && speaker.activity.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
+  // Elementos de la barra de navegación
   const navItems = [
     { icon: <Calendar size={24} />, label: 'Inicio', active: false },
-    { icon: <Users size={24} />, label: 'Speakers', active: true },
-    { icon: <User size={24} />, label: 'Participantes', active: false },
+    { icon: <Mic size={24} />, label: 'Speakers', active: true },
+    { icon: <Users size={24} />, label: 'Participantes', active: false },
     { icon: <Tool size={24} />, label: 'Herramientas', active: false },
+    { icon: <User size={24} />, label: 'Perfil', active: false }
   ];
 
   const handleRefresh = async () => {
-    if (refreshing) return;
+    if (refreshing) return; // Evitar múltiples clics
     setRefreshing(true);
     await fetchSpeakersData(true);
   };
@@ -199,6 +215,7 @@ const Speakers: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="max-w-md mx-auto pb-20">
+        {/* Header */}
         <div className="p-4 pt-6 flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold">Speakers</h1>
@@ -207,33 +224,11 @@ const Speakers: React.FC = () => {
             </p>
           </div>
           <div className="flex gap-2">
-            <button 
-              className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center"
-              onClick={toggleOfflineMode}
-            >
-              {isOfflineMode ? (
-                <WifiOff size={20} className="text-yellow-400" />
-              ) : (
-                <Wifi size={20} className="text-green-400" />
-              )}
-            </button>
-            
-            <button 
-              className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center"
-              onClick={toggleUpdateInfo}
-            >
-              <Info size={20} className="text-gray-300" />
-            </button>
-            
-            <Link 
-              to="/speakers/list" 
-              className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center"
-            >
-              <List size={20} className="text-gray-300" />
-            </Link>
+
           </div>
         </div>
         
+        {/* Data Status Indicator */}
         <div className="px-4 mb-3">
           <DataStatusIndicator 
             source={dataSource}
@@ -244,6 +239,7 @@ const Speakers: React.FC = () => {
           />
         </div>
         
+        {/* Update Info Tooltip */}
         {showUpdateInfo && (
           <div className="mx-4 mb-4 px-4 py-3 rounded-lg bg-gray-800 border border-gray-700">
             <h4 className="font-semibold mb-2">Actualización de Speakers</h4>
@@ -299,6 +295,7 @@ const Speakers: React.FC = () => {
           <Search size={20} className="absolute left-8 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
 
+        {/* Mensaje de error o éxito */}
         {error && (
           <div className={`mx-4 mt-3 px-4 py-2 rounded-lg ${
             error.includes('nuevos speakers') || error.includes('actualizados correctamente')
@@ -309,6 +306,7 @@ const Speakers: React.FC = () => {
           </div>
         )}
 
+        {/* Speakers Grid */}
         <div className="px-4 mt-4">
           {loading ? (
             <div className="flex justify-center py-8">
@@ -339,6 +337,7 @@ const Speakers: React.FC = () => {
         </div>
       </div>
 
+      {/* Bottom Navigation */}
       <Navbar items={navItems} />
     </div>
   );

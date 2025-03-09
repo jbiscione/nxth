@@ -119,24 +119,7 @@ const AllEvents: React.FC = () => {
             <h1 className="text-2xl font-bold">Todos los Eventos</h1>
           </div>
           <div className="flex gap-2">
-            <button 
-              className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center"
-              onClick={toggleOfflineMode}
-            >
-              {isOfflineMode ? (
-                <WifiOff size={20} className="text-yellow-400" />
-              ) : (
-                <Wifi size={20} className="text-green-400" />
-              )}
-            </button>
-            
-            <button 
-              className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center"
-              onClick={handleRefresh}
-              disabled={refreshing || isOfflineMode}
-            >
-              <RefreshCw size={20} className={`${refreshing ? 'animate-spin text-[#7065ef]' : 'text-gray-300'}`} />
-            </button>
+
           </div>
         </div>
 

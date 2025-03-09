@@ -20,6 +20,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './context/AuthContext';
 import OfflineIndicator from './components/OfflineIndicator';
+import ParticipantsList from './pages/ParticipantsList';
 
 function App() {
   return (
@@ -64,6 +65,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Participants />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/participants/list" 
+            element={
+              <ProtectedRoute>
+                <ParticipantsList />
               </ProtectedRoute>
             } 
           />

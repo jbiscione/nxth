@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Search, Linkedin, Instagram, RefreshCw, List, AlertCircle, Info, Database, Wifi, WifiOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { Calendar, Users, PenTool as Tool, User } from 'lucide-react';
+import { Calendar, Mic, PenTool as Tool, Users,User } from 'lucide-react';
 import { Participant } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { fetchParticipants, forceParticipantsUpdate, getParticipantsDataInfo } from '../services/userService';
@@ -163,9 +163,11 @@ const Participants: React.FC = () => {
 
   const navItems = [
     { icon: <Calendar size={24} />, label: 'Inicio', active: false },
-    { icon: <Users size={24} />, label: 'Speakers', active: false },
-    { icon: <User size={24} />, label: 'Participantes', active: true },
+    { icon: <Mic size={24} />, label: 'Speakers', active: false },
+    { icon: <Users size={24} />, label: 'Participantes', active: true },
     { icon: <Tool size={24} />, label: 'Herramientas', active: false },
+    { icon: <User size={24} />, label: 'Perfil', active: false }
+
   ];
 
   const handleRefresh = async () => {
@@ -210,6 +212,14 @@ const Participants: React.FC = () => {
             >
               <Info size={20} className="text-gray-300" />
             </button>
+
+            <Link 
+              to="/participants/list" 
+              className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center"
+            >
+              <List size={20} className="text-gray-300" />
+            </Link>
+
           </div>
         </div>
 
