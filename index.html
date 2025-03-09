@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Agregar meta tags para control de caché -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!-- Versión de la aplicación para forzar actualización -->
+    <meta name="app-version" content="1.0.8" />
+    <title>NeXthumans TANDIL 2025</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Verificar si necesitamos forzar una actualización
+      const lastVersion = sessionStorage.getItem('app_version');
+      const currentVersion = '1.0.8'; // Debe coincidir con el meta tag
+      
+      if (lastVersion !== currentVersion) {
+        console.log("Nueva versión detectada: " + currentVersion + " (anterior: " + lastVersion + ")");
+        sessionStorage.setItem('app_version', currentVersion);
+        
+        // Si hay una versión anterior, forzar recarga
+        if (lastVersion) {
+          console.log("Forzando recarga por actualización de versión");
+          window.location.reload(true);
+        }
+      }
+    </script>
+  </body>
+</html>
